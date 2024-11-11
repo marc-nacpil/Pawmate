@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/favicon/site.webmanifest">
+    <title>PawMate</title>
+
+    <!-- BootStrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Include Google Fonts for Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="home.css">
+
+    <style>
+        /* Style for the overlay that covers the background */
+        .ad-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
+        }
+
+        /* Style for the ad popup box */
+        .ad-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px; /* Increased width for videos */
+            max-width: 90vw;
+            max-height: 90vh;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            text-align: center;
+            border-radius: 8px;
+            overflow-y: auto;
+        }
+
+        /* Style for the close button inside the popup */
+        .ad-popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            z-index: 1001;
+        }
+
+        /* Video container for aspect ratio */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin-bottom: 15px;
+        }
+
+        /* Video styling */
+        .ad-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Image styling */
+        .ad-media {
+            width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        /* Content inside the ad */
+        .ad-content {
+            margin-top: 15px;
+            padding: 0 15px;
+        }
+
+        .ad-content h2 {
+            margin-top: 30px;
+            margin-bottom: 5px;
+            font-size: 25px;
+            color: #333;
+        }
+
+        .ad-content p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .ad-content .btn {
+            padding: 12px 25px;
+            background-color: #ffc107;
+            border: none;
+            color: #000;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .ad-content .btn:hover {
+            background-color: #e0a800;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 840px) {
+            .ad-popup {
+                width: 90vw;
+                padding: 15px;
+            }
+
+            .ad-content h3 {
+                font-size: 18px;
+            }
+
+            .ad-content p {
+                font-size: 14px;
+            }
+
+            .ad-content .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+    
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">
+                <!-- Nav Bar Photo -->
+                <img src="https://i.postimg.cc/CxM3RqRX/PawMate3.png" alt="Pawmate Logo" class="logo-img">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dog.html">Dog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cat.html">Cat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about-section">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../php/logout.php">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dogs and Cats Photo -->
+    <div class="section section-one" style="background-image: url('https://i.postimg.cc/CxWZvj1Q/H1.png');">
+        <h1>Will you help us find our <span class="paw-ever">PAW-EVER</span> homes ?</h1>
+        <button type="button" class="btn btn-warning" onclick="window.location.href='#viewpets';">View Pets!</button>
+        <!-- CHANGE THE LINK HERE -->
+    </div>
+
+    <!-- Change the Pets here -->
+    <div class="section section-two" id="viewpets">
+        <h2>Find your FUR-EVER Pawmate!</h2>
+        <div class="card-container">
+            <div class="card">
+                <img src="assets/Dogs1.JPG" alt="Adopt a Dog">
+                <div class="card-contents">
+                    <h3>Adopt a Dog?</h3>
+                    <p>Click the button below to find your fur-fect dog match!</p>
+                    <a href="./dog.html" class="btn btn-warning">Show more 🐾</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="assets/Cats.JPG" alt="Adopt a Cat">
+                <div class="card-contents">
+                    <h3>Adopt a Cat?</h3>
+                    <p>Click the button below to find your fur-fect cat match!</p>
+                    <a href="./cat.html" class="btn btn-warning">Show more 🐾</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="about-section" class="section-three">
+        <h1 class="title">About Us</h1>
+        <p class="title-line"></p>
+        <div class="about-container">
+            <div class="left-section">
+                <img src="https://i.postimg.cc/cH7h7Fjm/AU1.png" alt="The Team">
+            </div>
+
+            <div class="right-section">
+                <h3>Our&nbsp;<span style="color: #ffb700;">Mission</span></h3>
+                <p>At PawMate, we're on a mission to rescue abandoned pets and match them with loving families. We believe in second chances—for pets and people alike. Through adoptions, fostering, and community support, we’re turning wagging tails and purrs into stories of hope. Join us in creating a world where every stray finds a home, and every heart finds a friend! <br><br> We are glad that you are here! Click the button to meet the team!</p>
+                <a href="about.html" class="btn btn-warning">View Team 🐾</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-4 mb-0 text-muted">&copy; 2024 Pawmate</p>
+    
+            <a href="home.html"
+                class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                <img src="https://i.postimg.cc/m2dtB6Kr/PawMate6.png" class="bi me-2" width="70" height="50" alt="">
+            </a>
+    
+            <ul class="nav col-md-4 justify-content-end">
+                <li class="nav-item"><a href="home.html" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="dog.html" class="nav-link px-2 text-muted">Dog</a></li>
+                <li class="nav-item"><a href="cat.html" class="nav-link px-2 text-muted">Cat</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link px-2 text-muted">About</a></li>
+                <li class="nav-item"><a class="nav-link px-2 text-muted" href="../php/logout.php">Log Out</a></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script src="targeted-ads.js"></script>
+</body>
+
+</html>

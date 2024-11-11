@@ -1,0 +1,512 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawMate Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff5e6 0%, #fff 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .dashboard-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 50px;
+            height: auto;
+        }
+
+        .logo h1 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .logo span {
+            color: #F0A500;
+        }
+
+        .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: #fff;
+            color: #F0A500;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 2px solid #F0A500;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #F0A500;
+            color: white;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #fff 0%, #fff5e6 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(240, 165, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #F0A500;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1.25rem;
+            text-align: left;
+        }
+
+        th {
+            background: #fff5e6;
+            font-weight: 600;
+            color: #333;
+        }
+
+        th:first-child {
+            border-top-left-radius: 16px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 16px;
+        }
+
+        td {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: #fff5e6;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .dashboard-container {
+                padding: 1.5rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            th, td {
+                padding: 1rem;
+            }
+        }
+    </style>
+    <script>
+        async function fetchDashboardData() {
+            try {
+                const response = await fetch('../php/admin_dashboard.php');
+                const data = await response.json();
+                
+                // Update stats
+                document.getElementById('totalUsers').textContent = data.users_count;
+                document.getElementById('todayLogins').textContent = data.today_logins;
+                
+                // Update table
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = data.logs.map(log => `
+                    <tr>
+                        <td>${log.username}</td>
+                        <td>${log.firstname}</td>
+                        <td>${log.lastname}</td>
+                        <td>${log.login_date}</td>
+                        <td>${log.login_time}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Fetch data when page loads
+        document.addEventListener('DOMContentLoaded', fetchDashboardData);
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <div class="logo">
+                <img src="https://i.postimg.cc/m2dtB6Kr/PawMate6.png" alt="PawMate Logo">
+                <h1>Paw<span>Mate</span> Admin</h1>
+            </div>
+            <a href="../php/logout.php" class="logout-btn">Logout</a>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div id="totalUsers" class="stat-number">0</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div id="todayLogins" class="stat-number">0</div>
+                <div class="stat-label">Today's Logins</div>
+            </div>
+        </div>
+
+        <h2>Login Logs</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Login Date</th>
+                        <th>Login Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawMate Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff5e6 0%, #fff 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .dashboard-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 50px;
+            height: auto;
+        }
+
+        .logo h1 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .logo span {
+            color: #F0A500;
+        }
+
+        .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: #fff;
+            color: #F0A500;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 2px solid #F0A500;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #F0A500;
+            color: white;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #fff 0%, #fff5e6 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(240, 165, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #F0A500;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1.25rem;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: #fff5e6;
+            font-weight: 600;
+            color: #333;
+        }
+
+        th:first-child {
+            border-top-left-radius: 16px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 16px;
+        }
+
+        td {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: #fff5e6;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .dashboard-container {
+                padding: 1.5rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            th, td {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+    <script>
+        async function fetchDashboardData() {
+            try {
+                const response = await fetch('../php/admin.php');
+                const data = await response.json();
+                
+                // Update stats
+                document.getElementById('totalUsers').textContent = data.users_count;
+                document.getElementById('todayLogins').textContent = data.today_logins;
+                
+                // Update table
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = data.logs.map(log => `
+                    <tr>
+                        <td>${log.username}</td>
+                        <td>${log.firstname}</td>
+                        <td>${log.city}</td>
+                        <td>${log.preferred_pet}</td>
+                        <td>${log.ip_address}</td>
+                        <td>${log.device_type}</td>
+                        <td>${log.device_model}</td>
+                        <td>${log.os_name}</td>
+                        <td>${log.browser_name}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Fetch data when page loads
+        document.addEventListener('DOMContentLoaded', fetchDashboardData);
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <div class="logo">
+                <img src="https://i.postimg.cc/m2dtB6Kr/PawMate6.png" alt="PawMate Logo">
+                <h1>Paw<span>Mate</span> Admin</h1>
+            </div>
+            <a href="../php/logout.php" class="logout-btn">Logout</a>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div id="totalUsers" class="stat-number">0</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div id="todayLogins" class="stat-number">0</div>
+                <div class="stat-label">Today's Logins</div>
+            </div>
+        </div>
+
+        <h2>User Activity Logs</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>City</th>
+                        <th>Preferred Pet</th>
+                        <th>IP Address</th>
+                        <th>Device Type</th>
+                        <th>Device Model</th>
+                        <th>OS</th>
+                        <th>Browser</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
